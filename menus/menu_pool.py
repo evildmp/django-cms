@@ -122,7 +122,12 @@ class MenuPool(object):
         # Cache key management
         lang = get_language()
         prefix = getattr(settings, "CMS_CACHE_PREFIX", "menu_cache_")
-        key = "%smenu_nodes_%s_%s" % (prefix, lang, site_id)
+
+        # because of the amendments to cms/menu.py, we need to cache for each request_path, so instead of:
+        # key = "%smenu_nodes_%s_%s" % (prefix, lang, site_id) 
+        # we do:
+        key = "%smenu_nodes_%s_%s_%s" % (prefix, lang, site_id, request.path) 
+
         if request.user.is_authenticated():
             key += "_%s_user" % request.user.pk
         cached_nodes = cache.get(key, None)
