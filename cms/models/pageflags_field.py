@@ -33,7 +33,7 @@ class NamedFlagsField(models.Field):
         if value:
             return value.split(',')
         return []
-    def get_db_prep_value(self, value):
+    def get_db_prep_value(self, value, connection, prepared=False):
         if isinstance(value, list):
             active_flags = value
         else:
